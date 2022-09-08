@@ -1,9 +1,11 @@
 package gostructvalidator
 
 import (
-	"github.com/DanLavine/gostructvalidator/internal"
-	"github.com/DanLavine/gostructvalidator/validators"
+	"github.com/DanLavine/gostructvalidator/internal/structvalidator"
+	"github.com/DanLavine/gostructvalidator/internal/validators"
 )
+
+type Validate = validators.Validate
 
 type StructValidator interface {
 	// Perform Validation on any struct instance
@@ -11,7 +13,7 @@ type StructValidator interface {
 
 	// Allow for custom 3rd party validators.
 	// Or the ability to change default validators behavior
-	AddValidator(name string, validate validators.Validate)
+	AddValidator(name string, validate Validate)
 }
 
 type structValidator struct {
@@ -20,12 +22,12 @@ type structValidator struct {
 
 func New() *structValidator {
 	return &structValidator{
-		internalStructValidator: internal.New(),
+		internalStructValidator: structvalidator.New(),
 	}
 }
 
 // Allow for custom 3rd party validators. Or the ability to change default validators behavior
-func (sv *structValidator) AddValidator(name string, validate validators.Validate) {
+func (sv *structValidator) AddValidator(name string, validate Validate) {
 	sv.internalStructValidator.AddValidator(name, validate)
 }
 

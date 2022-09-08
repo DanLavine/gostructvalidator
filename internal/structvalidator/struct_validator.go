@@ -1,7 +1,7 @@
-package internal
+package structvalidator
 
 import (
-	"github.com/DanLavine/gostructvalidator/validators"
+	"github.com/DanLavine/gostructvalidator/internal/validators"
 	"github.com/DanLavine/gostructwalker"
 )
 
