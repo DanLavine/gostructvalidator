@@ -6,13 +6,15 @@ import (
 )
 
 type structValidator struct {
+	tagName    string
 	validators map[string]validators.Validate
 }
 
 func New() *structValidator {
 	return &structValidator{
+		tagName: "validate", // TODO? should this be configurable?
 		validators: map[string]validators.Validate{
-			"min-length": validators.MinLength,
+			"minLength": validators.MinLength,
 		},
 	}
 }
@@ -23,9 +25,7 @@ func (sv *structValidator) AddValidator(name string, validate validators.Validat
 }
 
 func (sv *structValidator) Validate(anyStruct interface{}) error {
-	validationWalker := NewStructWalker()
-
-	structWalker, err := gostructwalker.New(validationWalker)
+	structWalker, err := gostructwalker.New(sv)
 	if err != nil {
 		return err
 	}

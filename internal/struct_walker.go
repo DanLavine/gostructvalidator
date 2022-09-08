@@ -1,13 +1,19 @@
 package internal
 
-import "github.com/DanLavine/gostructwalker"
+import (
+	"github.com/DanLavine/gostructwalker"
+)
 
-type structWalker struct{}
+func (sv *structValidator) FieldCallback(structParser *gostructwalker.StructParser) {
+	//fmt.Printf("Field: %#v\n", structParser.Field)
+	//fmt.Printf("Value: %#v\n", structParser.Value)
+	//fmt.Println()
 
-func NewStructWalker() *structWalker {
-	return &structWalker{}
-}
+	tags := ParseTag(structParser.Field.Tag.Get(sv.tagName))
 
-func (sw *structWalker) FieldCallback(structParser *gostructwalker.StructParser) {
-
+	for _, tag := range tags {
+		if callback, ok := sv.validators[tag.Key]; ok {
+			callback(structParser, tag.Value)
+		}
+	}
 }
