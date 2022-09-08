@@ -5,7 +5,7 @@ import (
 	"github.com/DanLavine/gostructwalker"
 )
 
-func (sv *structValidator) FieldCallback(structParser *gostructwalker.StructParser) {
+func (sv *StructValidator) FieldCallback(structParser *gostructwalker.StructParser) {
 	//fmt.Printf("Field: %#v\n", structParser.Field)
 	//fmt.Printf("Value: %#v\n", structParser.Value)
 	//fmt.Println()

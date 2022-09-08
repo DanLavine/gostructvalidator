@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/DanLavine/gostructvalidator/internal/errors"
+	"github.com/DanLavine/gostructvalidator/errors"
 	"github.com/DanLavine/gostructwalker"
 )
 
