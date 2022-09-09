@@ -14,7 +14,10 @@ func (sv *StructValidator) FieldCallback(structParser *gostructwalker.StructPars
 
 	for _, tag := range tags {
 		if callback, ok := sv.validators[tag.Key]; ok {
-			callback(structParser, tag.Value)
+			err := callback(structParser, tag.Value)
+			if err != nil {
+				sv.errors = append(sv.errors, err)
+			}
 		}
 	}
 }

@@ -3,11 +3,15 @@ package errors
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/DanLavine/gostructwalker"
 )
 
-type Errors []Error
+type Errors []*Error
 
 type Error struct {
+	GenericError error
+
 	ExpectedValue interface{}
 	ActualValue   interface{}
 	Field         string
@@ -25,4 +29,26 @@ func (e Errors) Error() string {
 	}
 
 	return string(errorJson)
+}
+
+func GetFieldName(structParser *gostructwalker.StructParser) string {
+	field := ""
+
+	for {
+		if structParser == nil {
+			break
+		}
+
+		if field == "" {
+			field = structParser.Field.Name
+		} else {
+			field = fmt.Sprintf("%s.%s", structParser.Field.Name, field)
+
+			// TODO at the root, we should add the struct name? or should we ignore that?
+		}
+
+		structParser = structParser.Parent
+	}
+
+	return field
 }

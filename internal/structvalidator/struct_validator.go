@@ -1,6 +1,7 @@
 package structvalidator
 
 import (
+	"github.com/DanLavine/gostructvalidator/errors"
 	"github.com/DanLavine/gostructvalidator/internal/validators"
 	"github.com/DanLavine/gostructvalidator/validator"
 	"github.com/DanLavine/gostructwalker"
@@ -9,6 +10,8 @@ import (
 type StructValidator struct {
 	tagName    string
 	validators map[string]validator.Validate
+
+	errors errors.Errors
 }
 
 func New() *StructValidator {
@@ -31,5 +34,9 @@ func (sv *StructValidator) Validate(anyStruct interface{}) error {
 		return err
 	}
 
-	return structWalker.Walk(anyStruct)
+	if err = structWalker.Walk(anyStruct); err != nil {
+		sv.errors = append(sv.errors, &errors.Error{GenericError: err})
+	}
+
+	return sv.errors
 }

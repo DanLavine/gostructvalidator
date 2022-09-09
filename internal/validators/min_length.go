@@ -8,16 +8,28 @@ import (
 	"github.com/DanLavine/gostructwalker"
 )
 
-func MinLength(structParser *gostructwalker.StructParser, tagValue string) *errors.Error {
+func MinLength(structParser *gostructwalker.StructParser, tagValue string) (validateErr *errors.Error) {
+	defer func() {
+		if r := recover(); r != nil {
+			validateErr = &errors.Error{
+				ExpectedValue: "a type of slice [array, slice, channel, string, map]",
+				ActualValue:   structParser.Value.Kind().String(),
+				Field:         errors.GetFieldName(structParser),
+			}
+		}
+	}()
+
 	minLength, err := strconv.Atoi(tagValue)
 	if err != nil {
-		return &errors.Error{}
+		return &errors.Error{GenericError: err}
 	}
 
-	fmt.Println(minLength)
-
 	if structParser.Value.Len() < minLength {
-		return nil //fmt.Errorf("value '%v' is less than min legth %d", structParser.Value.Interface(), minLength)
+		return &errors.Error{
+			ExpectedValue: fmt.Sprintf("greater than %d", minLength),
+			ActualValue:   structParser.Value.Interface(),
+			Field:         errors.GetFieldName(structParser),
+		}
 	}
 
 	return nil
