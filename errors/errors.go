@@ -13,6 +13,7 @@ type Error struct {
 	ExpectedValue interface{}
 	ActualValue   interface{}
 	Field         string
+	Value         interface{}
 }
 
 func NewErrors() Errors {

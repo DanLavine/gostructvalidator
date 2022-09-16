@@ -29,7 +29,7 @@ func (sv *StructValidator) AddValidator(name string, validate validator.Validate
 }
 
 func (sv *StructValidator) Validate(anyStruct interface{}) error {
-	structWalker, err := gostructwalker.New(sv)
+	structWalker, err := gostructwalker.New(gostructwalker.Config{TagKey: sv.tagName}, sv)
 	if err != nil {
 		return err
 	}
