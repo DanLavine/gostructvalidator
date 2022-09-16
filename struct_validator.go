@@ -9,10 +9,27 @@ type structValidator struct {
 	internalValidator *structvalidator.StructValidator
 }
 
-func New() *structValidator {
-	return &structValidator{
-		internalValidator: structvalidator.New(),
+// allow for custom struct tags to use rather than the default 'validate'
+func New(tagString string) (*structValidator, error) {
+	validator, err := structvalidator.New(tagString)
+	if err != nil {
+		return nil, err
 	}
+
+	return &structValidator{
+		internalValidator: validator,
+	}, nil
+}
+
+func DefaultValidator() (*structValidator, error) {
+	validator, err := structvalidator.New("validate")
+	if err != nil {
+		return nil, err
+	}
+
+	return &structValidator{
+		internalValidator: validator,
+	}, nil
 }
 
 // Allow for custom 3rd party validators. Or the ability to change default validators behavior

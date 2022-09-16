@@ -15,13 +15,18 @@ func MinLength(structParser *gostructwalker.StructParser, tagValue string) (vali
 				ExpectedValue: "a type of slice [array, slice, channel, string, map]",
 				ActualValue:   structParser.StructValue.Kind().String(),
 				Field:         structParser.GetFieldName(),
+				Value:         structParser.StructValue.Interface(),
 			}
 		}
 	}()
 
 	minLength, err := strconv.Atoi(tagValue)
 	if err != nil {
-		return &errors.Error{GenericError: err}
+		return &errors.Error{
+			GenericError: err,
+			Field:        structParser.GetFieldName(),
+			Value:        structParser.StructValue.Interface(),
+		}
 	}
 
 	actualLen := structParser.StructValue.Len()
