@@ -5,7 +5,7 @@ import (
 )
 
 func (sv *StructValidator) FieldCallback(structParser *gostructwalker.StructParser) {
-	for key, value := range structParser.Tags {
+	for key, value := range structParser.ParsedTags {
 		if callback, ok := sv.validators[key]; ok {
 			err := callback(structParser, value)
 			if err != nil {
